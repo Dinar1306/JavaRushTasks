@@ -13,6 +13,7 @@ public class ModelData {
         this.displayDeletedUserList = displayDeletedUserList;
     }
 
+
     public boolean isDisplayDeletedUserList() {
 
         return displayDeletedUserList;
@@ -37,4 +38,6 @@ public class ModelData {
 
         return users;
     }
+
+
 }
