@@ -58,8 +58,8 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         String slovo = ""; //временная пустая строка для составления слова из символов
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String fileName1 = reader.readLine();   //имя файла "D:/OneDrive7/OneDrive/JR/file1.txt"; //  //todo// получаем имя файла с консоли
-        String fileName2 = reader.readLine();   //имя файла "D:/OneDrive7/OneDrive/JR/file2.txt"; // //todo// получаем имя файла с консоли
+        String fileName1 = /*reader.readLine();   //имя файла */ "D:/OneDrive7/OneDrive/JR/file1.txt"; //  //todo// получаем имя файла с консоли
+        String fileName2 = /*reader.readLine();   //имя файла */ "D:/OneDrive7/OneDrive/JR/file2.txt"; // //todo// получаем имя файла с консоли
         reader.close();
         // читаем первый файл
         BufferedReader br1 = new BufferedReader(new FileReader(fileName1));
@@ -74,7 +74,7 @@ public class Solution {
         slovo = ""; //обнуляем временную строку
 
         // читаем второй файл
-        BufferedReader br2 = new BufferedReader(new FileReader(fileName1));
+        BufferedReader br2 = new BufferedReader(new FileReader(fileName2));
         while (br2.ready()) //пока есть непрочитанные байты в потоке ввода
         {
             int data = br2.read();                //читаем один символ (char будет расширен до int)
@@ -83,19 +83,52 @@ public class Solution {
         pattern = Pattern.compile("\r\n");       // разбиваем на строки
         String[] values2 = pattern.split(slovo); //таблица из строк второго файла
 
+        br1.close();
+        br2.close();
+
         // у кого строк больше?
-        Integer max,i;
-        if (values1.length>values2.length) max = values1.length;
-        else max = values2.length;
+        LineItem lineItem; //элементы листа line
+        int max, i;
+        int max1 = 0;
+        int max2 = 0;
+        if (values1.length>values2.length) max1 = values1.length;
+        else max2 = values2.length;
+        if (max1>max2) { // счетчик по первому файлу
+            //начинаем сравнение
+            i = 0;              //обнуление бугунка по строкам
+            while (i <= max1 - 1) {
+                if (values1[i].equals(values2[i])) {
+                    lines.add(new LineItem(Type.SAME, values1[i]));
+                } else if (values1[i+1].equals(values2[i])) { // след.строка первого со строкой второго
+                    lines.add(new LineItem(Type.REMOVED, values1[i]));
+                } else if (values1[i].equals(values2[i+1])) { // след.строка первого со строкой второго
+                    lines.add(new LineItem(Type.ADDED, values1[i]));
+                }
+                i++;
+            } // while
 
-        //начинаем сравнение
-        i = 0;              //обнуление бугунка по строкам
-        while (i <= max-1){
+        } else {        // иначе счетчик по второму файлу
+            //начинаем сравнение
+            i = 0;              //обнуление бугунка по строкам
+            while (i <= max2 - 1) {
+                if (values1[i].equals(values2[i])) {
+                    lines.add(new LineItem(Type.SAME, values1[i]));
+                } else if (values1[i+1].equals(values2[i])) { // след.строка первого со строкой второго
+                    lines.add(new LineItem(Type.REMOVED, values1[i]));
+                } else if (values1[i].equals(values2[i+1])) { // след.строка первого со строкой второго
+                    lines.add(new LineItem(Type.ADDED, values1[i]));
+                }
+                i++;
+            } // while
 
-            i++;
-        } // while
+        }
+
+
+
+
 
     } //main
+
 
 
     public static enum Type {

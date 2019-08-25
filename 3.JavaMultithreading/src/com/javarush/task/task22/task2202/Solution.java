@@ -12,7 +12,6 @@ public class Solution {
 
     public static String getPartOfString(String stroka) {
         String otvet;
-
         try {
             String string = stroka.trim();
             int start = string.indexOf(" ");
