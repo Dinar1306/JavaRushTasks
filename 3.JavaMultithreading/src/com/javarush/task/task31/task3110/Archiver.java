@@ -1,25 +1,37 @@
 package com.javarush.task.task31.task3110;
 
-import java.io.BufferedReader;
+import com.javarush.task.task31.task3110.exception.WrongZipFileException;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Archiver {
-    public static void main(String[] args) throws Exception {
-        //ввести полный путь архива с клавиатуры.
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String fileName = reader.readLine();
-        Path path = Paths.get(fileName);
+    public static void main(String[] args) throws IOException {
 
-        //Создай объект класса ZipFileManager, передав в него имя файла архива.
-        ZipFileManager zipFileManager = new ZipFileManager(path);
+        Operation operation = null;
+        do {
+            try {
+                operation = askOperation();
+                CommandExecutor.execute(operation);
+            } catch (WrongZipFileException e) {
+                ConsoleHelper.writeMessage("Вы не выбрали файл архива или выбрали неверный файл.");
+            } catch (Exception e) {
+                ConsoleHelper.writeMessage("Произошла ошибка. Проверьте введенные данные.");
+            }
 
-        //Запроси пользователя ввести путь к файлу, который будем архивировать.
-        String fileToArchive = reader.readLine();
+        } while (operation != Operation.EXIT);
+    }
 
-        //Вызови метод createZip у объекта ZipFileManager, передав в него путь для архивации.
-        zipFileManager.createZip(Paths.get(fileToArchive));
+
+    public static Operation askOperation() throws IOException {
+        ConsoleHelper.writeMessage("");
+        ConsoleHelper.writeMessage("Выберите операцию:");
+        ConsoleHelper.writeMessage(String.format("\t %d - упаковать файлы в архив", Operation.CREATE.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - добавить файл в архив", Operation.ADD.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - удалить файл из архива", Operation.REMOVE.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - распаковать архив", Operation.EXTRACT.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - просмотреть содержимое архива", Operation.CONTENT.ordinal()));
+        ConsoleHelper.writeMessage(String.format("\t %d - выход", Operation.EXIT.ordinal()));
+
+        return Operation.values()[ConsoleHelper.readInt()];
     }
 }
