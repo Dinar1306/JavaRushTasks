@@ -70,7 +70,7 @@ public class Solution extends ClassLoader{
         return animals;
     }
 
-   
+
 
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
