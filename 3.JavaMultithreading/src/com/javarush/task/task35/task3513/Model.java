@@ -7,7 +7,7 @@ public class Model {
     private static final int FIELD_WIDTH = 4; // размер поля
     private Tile[][] gameTiles;               // игровое поле
     int score;                                // счет
-    int maxTile;                              // значение макимальной плитки
+    int maxTile;                              // значение макимальной плитки  
 
     //для реализации возврата хода
     private Stack<Integer> previousScores;
@@ -224,40 +224,40 @@ public class Model {
         }
     }
 
-//    // проверка измененя поля
-//    private boolean hasBoardChanged() {
-//        boolean result = false;
-//        int sumNow = 0;
-//        int sumPrevious = 0;
-//        Tile[][] tmp = previousStates.peek();
-//        for (int i = 0; i < gameTiles.length; i++) {
-//            for (int j = 0; j < gameTiles[0].length; j++) {
-//                sumNow += gameTiles[i][j].getValue();
-//                sumPrevious += tmp[i][j].getValue();
-//            }
-//        }
-//        return sumNow != sumPrevious;
-//    }
+    // проверка измененя поля
+    private boolean hasBoardChanged() {
+        boolean result = false;
+        int sumNow = 0;
+        int sumPrevious = 0;
+        Tile[][] tmp = previousStates.peek();
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles[0].length; j++) {
+                sumNow += gameTiles[i][j].getValue();
+                sumPrevious += tmp[i][j].getValue();
+            }
+        }
+        return sumNow != sumPrevious;
+    }
 
-//    // проверка эффективности хода
-//    private MoveEfficiency getMoveEfficiency(Move move) {
-//        MoveEfficiency moveEfficiency;
-//        move.move();
-//        if (hasBoardChanged()) moveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
-//        else moveEfficiency = new MoveEfficiency(-1, 0, move);
-//        rollback();
-//
-//        return moveEfficiency;
-//    }
-//
-//    // реализация выбора эффективного хода из возможных
-//    public void autoMove() {
-//        PriorityQueue<MoveEfficiency> queue = new PriorityQueue(4, Collections.reverseOrder());
-//        queue.add(getMoveEfficiency(this::left));
-//        queue.add(getMoveEfficiency(this::right));
-//        queue.add(getMoveEfficiency(this::up));
-//        queue.add(getMoveEfficiency(this::down));
-//        Move move = queue.peek().getMove();
-//        move.move();
-//    }
+    // проверка эффективности хода
+    private MoveEfficiency getMoveEfficiency(Move move) {
+        MoveEfficiency moveEfficiency;
+        move.move();
+        if (hasBoardChanged()) moveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
+        else moveEfficiency = new MoveEfficiency(-1, 0, move);
+        rollback();
+
+        return moveEfficiency;
+    }
+
+    // реализация выбора эффективного хода из возможных
+    public void autoMove() {
+        PriorityQueue<MoveEfficiency> queue = new PriorityQueue(4, Collections.reverseOrder());
+        queue.add(getMoveEfficiency(this::left));
+        queue.add(getMoveEfficiency(this::right));
+        queue.add(getMoveEfficiency(this::up));
+        queue.add(getMoveEfficiency(this::down));
+        Move move = queue.peek().getMove();
+        move.move();
+    }
 }
