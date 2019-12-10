@@ -2,6 +2,9 @@ package com.javarush.task.task27.task2712.ad;
 
 import com.javarush.task.task27.task2712.ConsoleHelper;
 import com.javarush.task.task27.task2712.kitchen.Order;
+import com.javarush.task.task27.task2712.statistic.StatisticManager;
+import com.javarush.task.task27.task2712.statistic.event.EventDataRow;
+import com.javarush.task.task27.task2712.statistic.event.VideoSelectedEventDataRow;
 
 import java.util.*;
 
@@ -54,10 +57,14 @@ public class AdvertisementManager {
             amount += a.getAmountPerOneDisplaying();
             totalDuration += a.getDuration();
         }
-//        EventDataRow eventDataRow = new VideoSelectedEventDataRow(bestList, amount, totalDuration);
-//        StatisticEventManager.getInstance().register(eventDataRow);
 
-        for (Advertisement a : bestList)
+        //Зарегистрируй событие "видео выбрано" перед отображением рекламы пользователю.
+        EventDataRow eventDataRow = new VideoSelectedEventDataRow(bestList, amount, totalDuration);
+        StatisticManager.getInstance().register(eventDataRow);
+        //StatisticManager.getInstance().register(new VideoSelectedEventDataRow(bestList, amount, totalDuration));
+
+
+        for (Advertisement a : bestList)  //Отображаем рекламу
         {
             ConsoleHelper.writeMessage(a.getName() + " is displaying... "
                     + a.getAmountPerOneDisplaying() + ", "

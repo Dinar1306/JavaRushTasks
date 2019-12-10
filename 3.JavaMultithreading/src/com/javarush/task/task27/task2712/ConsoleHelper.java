@@ -26,7 +26,7 @@ public class ConsoleHelper {
 
     public static List<Dish> getAllDishesForOrder() throws IOException { //просит пользователя выбрать блюдо и добавляет его в список.
         List<Dish> dishes = new ArrayList<>(); // создадим список для выбранных пользователем блюд
-        ConsoleHelper.writeMessage("Выберите необходимое блюдо... Если закончили - введите 'exit'");
+        ConsoleHelper.writeMessage("Введите название блюда, или 'exit':");
         ConsoleHelper.writeMessage(Dish.allDishesToString()); //выведем список блюд
 
         String selectDish;

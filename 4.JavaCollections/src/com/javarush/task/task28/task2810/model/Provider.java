@@ -14,11 +14,12 @@ import java.util.List;
 Этот метод будет возвращать все java вакансии с выбранного сайта (ресурса).
  */
 public class Provider {
-    private Strategy strategy;
+    Strategy strategy;
 
     //В классе Provider создай пустой метод getJavaVacancies(String searchString), который будет возвращать список вакансий
     public List<Vacancy> getJavaVacancies(String searchString) throws IOException {
         if(searchString == null) return Collections.emptyList();
+        //setStrategy(strategy);
         return strategy.getVacancies(searchString);}
 
     public void setStrategy(Strategy strategy) {

@@ -1,5 +1,8 @@
 package com.javarush.task.task27.task2712.ad;
 
+import com.javarush.task.task27.task2712.statistic.StatisticManager;
+import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDataRow;
+
 public class Advertisement {
     Object content; // видео
     String name; // имя/название
@@ -20,8 +23,12 @@ public class Advertisement {
     }
 
     public void revalidate() throws UnsupportedOperationException {
-        if (hits<1) throw new UnsupportedOperationException(); //если количество показов не положительное число
-        else hits -= 1;      //Уменьшать количество показов.
+        if (getHits() <= 0){
+            //throw new UnsupportedOperationException();
+            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(duration));
+            throw new NoVideoAvailableException();
+        }
+        hits--;
     }
 
 

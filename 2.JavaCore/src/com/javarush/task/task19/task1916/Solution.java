@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /* 
 Отслеживаем изменения
@@ -56,74 +57,101 @@ public class Solution {
     public static List<LineItem> lines = new ArrayList<LineItem>();
 
     public static void main(String[] args) throws IOException {
-        String slovo = ""; //временная пустая строка для составления слова из символов
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String fileName1 = /*reader.readLine();   //имя файла */ "D:/OneDrive7/OneDrive/JR/file1.txt"; //  //todo// получаем имя файла с консоли
-        String fileName2 = /*reader.readLine();   //имя файла */ "D:/OneDrive7/OneDrive/JR/file2.txt"; // //todo// получаем имя файла с консоли
-        reader.close();
-        // читаем первый файл
-        BufferedReader br1 = new BufferedReader(new FileReader(fileName1));
-        while (br1.ready()) //пока есть непрочитанные байты в потоке ввода
-        {
-            int data = br1.read(); //читаем один символ (char будет расширен до int)
-            slovo += (char) data;
-        }   //while
-        Pattern pattern = Pattern.compile("\r\n"); // разбиваем на строки
-        String[] values1 = pattern.split(slovo); //таблица из строк первого файла
+//        String slovo = ""; //временная пустая строка для составления слова из символов
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//        String fileName1 = /*reader.readLine();   //имя файла */ "D:/OneDrive7/OneDrive/JR/file1.txt"; //  //todo// получаем имя файла с консоли
+//        String fileName2 = /*reader.readLine();   //имя файла */ "D:/OneDrive7/OneDrive/JR/file2.txt"; // //todo// получаем имя файла с консоли
+//        reader.close();
+//        // читаем первый файл
+//        BufferedReader br1 = new BufferedReader(new FileReader(fileName1));
+//        while (br1.ready()) //пока есть непрочитанные байты в потоке ввода
+//        {
+//            int data = br1.read(); //читаем один символ (char будет расширен до int)
+//            slovo += (char) data;
+//        }   //while
+//        Pattern pattern = Pattern.compile("\r\n"); // разбиваем на строки
+//        String[] values1 = pattern.split(slovo); //таблица из строк первого файла
+//
+//        slovo = ""; //обнуляем временную строку
+//
+//        // читаем второй файл
+//        BufferedReader br2 = new BufferedReader(new FileReader(fileName2));
+//        while (br2.ready()) //пока есть непрочитанные байты в потоке ввода
+//        {
+//            int data = br2.read();                //читаем один символ (char будет расширен до int)
+//            slovo += (char) data;
+//        }   //while
+//        pattern = Pattern.compile("\r\n");       // разбиваем на строки
+//        String[] values2 = pattern.split(slovo); //таблица из строк второго файла
+//
+//        br1.close();
+//        br2.close();
+//
+//        // у кого строк больше?
+//        LineItem lineItem; //элементы листа line
+//        int max, i;
+//        int max1 = 0;
+//        int max2 = 0;
+//        if (values1.length>values2.length) max1 = values1.length;
+//        else max2 = values2.length;
+//        if (max1>max2) { // счетчик по первому файлу
+//            //начинаем сравнение
+//            i = 0;              //обнуление бугунка по строкам
+//            while (i <= max1 - 1) {
+//                if (values1[i].equals(values2[i])) {
+//                    lines.add(new LineItem(Type.SAME, values1[i]));
+//                } else if (values1[i+1].equals(values2[i])) { // след.строка первого со строкой второго
+//                    lines.add(new LineItem(Type.REMOVED, values1[i]));
+//                } else if (values1[i].equals(values2[i+1])) { // след.строка первого со строкой второго
+//                    lines.add(new LineItem(Type.ADDED, values1[i]));
+//                }
+//                i++;
+//            } // while
+//
+//        } else {        // иначе счетчик по второму файлу
+//            //начинаем сравнение
+//            i = 0;              //обнуление бугунка по строкам
+//            while (i <= max2 - 1) {
+//                if (values1[i].equals(values2[i])) {
+//                    lines.add(new LineItem(Type.SAME, values1[i]));
+//                } else if (values1[i+1].equals(values2[i])) { // след.строка первого со строкой второго
+//                    lines.add(new LineItem(Type.REMOVED, values1[i]));
+//                } else if (values1[i].equals(values2[i+1])) { // след.строка первого со строкой второго
+//                    lines.add(new LineItem(Type.ADDED, values1[i]));
+//                }
+//                i++;
+//            } // while
+//
+//        }
 
-        slovo = ""; //обнуляем временную строку
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+             FileReader fileReader1 = new FileReader(reader.readLine());
+             FileReader fileReader2 = new FileReader(reader.readLine())) {
 
-        // читаем второй файл
-        BufferedReader br2 = new BufferedReader(new FileReader(fileName2));
-        while (br2.ready()) //пока есть непрочитанные байты в потоке ввода
-        {
-            int data = br2.read();                //читаем один символ (char будет расширен до int)
-            slovo += (char) data;
-        }   //while
-        pattern = Pattern.compile("\r\n");       // разбиваем на строки
-        String[] values2 = pattern.split(slovo); //таблица из строк второго файла
+            List<String> original = new BufferedReader(fileReader1).lines().collect(Collectors.toList());
+            List<String> modified = new BufferedReader(fileReader2).lines().collect(Collectors.toList());
 
-        br1.close();
-        br2.close();
-
-        // у кого строк больше?
-        LineItem lineItem; //элементы листа line
-        int max, i;
-        int max1 = 0;
-        int max2 = 0;
-        if (values1.length>values2.length) max1 = values1.length;
-        else max2 = values2.length;
-        if (max1>max2) { // счетчик по первому файлу
-            //начинаем сравнение
-            i = 0;              //обнуление бугунка по строкам
-            while (i <= max1 - 1) {
-                if (values1[i].equals(values2[i])) {
-                    lines.add(new LineItem(Type.SAME, values1[i]));
-                } else if (values1[i+1].equals(values2[i])) { // след.строка первого со строкой второго
-                    lines.add(new LineItem(Type.REMOVED, values1[i]));
-                } else if (values1[i].equals(values2[i+1])) { // след.строка первого со строкой второго
-                    lines.add(new LineItem(Type.ADDED, values1[i]));
+            while (original.size() != 0 & modified.size() != 0) {
+                if (original.get(0).equals(modified.get(0))) {
+                    lines.add(new LineItem(Type.SAME, original.remove(0)));
+                    modified.remove(0);
+                } else if (modified.size() != 1 && original.get(0).equals(modified.get(1))) {
+                    lines.add(new LineItem(Type.ADDED, modified.remove(0)));
+                } else if (original.size() != 1 && original.get(1).equals(modified.get(0))) {
+                    lines.add(new LineItem(Type.REMOVED, original.remove(0)));
                 }
-                i++;
-            } // while
+            }
 
-        } else {        // иначе счетчик по второму файлу
-            //начинаем сравнение
-            i = 0;              //обнуление бугунка по строкам
-            while (i <= max2 - 1) {
-                if (values1[i].equals(values2[i])) {
-                    lines.add(new LineItem(Type.SAME, values1[i]));
-                } else if (values1[i+1].equals(values2[i])) { // след.строка первого со строкой второго
-                    lines.add(new LineItem(Type.REMOVED, values1[i]));
-                } else if (values1[i].equals(values2[i+1])) { // след.строка первого со строкой второго
-                    lines.add(new LineItem(Type.ADDED, values1[i]));
-                }
-                i++;
-            } // while
-
+            if (original.size() != 0) {
+                lines.add(new LineItem(Type.REMOVED, original.remove(0)));
+            } else if (modified.size() != 0) {
+                lines.add(new LineItem(Type.ADDED, modified.remove(0)));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-
+        lines.forEach(System.out::println);
 
 
 
@@ -144,6 +172,14 @@ public class Solution {
         public LineItem(Type type, String line) {
             this.type = type;
             this.line = line;
+        }
+
+        @Override
+        public String toString() {
+            return "LineItem{" +
+                    "type=" + type +
+                    ", line='" + line + '\'' +
+                    '}';
         }
     }
 }

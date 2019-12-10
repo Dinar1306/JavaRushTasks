@@ -13,9 +13,14 @@ public class Restaurant {
 //        tablet1.createOrder();
 //        tablet1.createOrder();
         Cook firstCook = new Cook("Mumamba");
+        Waiter oficiant = new Waiter();
         tablet.addObserver(firstCook);
         tablet.createOrder();
-        Waiter oficiant = new Waiter();
         firstCook.addObserver(oficiant);
+        DirectorTablet dt = new DirectorTablet();
+        dt.printAdvertisementProfit();
+        dt.printActiveVideoSet();
+        dt.printArchivedVideoSet();
+        dt.printCookWorkloading();
     }
 }

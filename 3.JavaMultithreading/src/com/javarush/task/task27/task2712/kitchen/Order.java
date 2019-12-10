@@ -49,6 +49,7 @@ public class Order {
         return totalTime;
     }
 
-
-
+    public List<Dish> getDishes() {
+        return dishes;
+    }
 }

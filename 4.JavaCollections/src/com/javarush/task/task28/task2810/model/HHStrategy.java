@@ -12,10 +12,12 @@ import java.util.List;
 //Этот класс будет реализовывать конкретную стратегию работы с сайтом ХэдХантер (http://hh.ua/ и http://hh.ru/).
 public class HHStrategy implements Strategy {
     //private static final String URL_FORMAT = "http://ufa.hh.ru/search/vacancy?text=java+%s&page=%d";
+    private static final String URL_FORMAT = "http://hh.ru/search/vacancy?text=java+%s&page=%d";
+
     String url = String.format(URL_FORMAT, "Уфа", 1);
     private static final String userAgent = "Mozilla/5.0 (jsoup)";
 //  private static final int timeout = 2 * 500;
-    private static final String URL_FORMAT = "http://javarush.ru/testdata/big28data.html?text=java+%s&page=%d";
+ //   private static final String URL_FORMAT = "http://javarush.ru/testdata/big28data.html?text=java+%s&page=%d";
     String ADDITIONAL_VALUE;
     int PAGE_VALUE = 0;
 
@@ -34,8 +36,9 @@ public class HHStrategy implements Strategy {
                 for (Element element : elements) {
                     if (element != null) {
                         Vacancy vac = new Vacancy();
+//                        //У каждой вакансии должно быть заполнено поле title полученными из html-элемента данными о названии вакансии
                         vac.setTitle(element.getElementsByAttributeValueContaining("data-qa", "title").text().trim());
-                        //vacancy.setTitle(title.text());
+
                         vac.setCity(element.getElementsByAttributeValueContaining("data-qa", "address").text().trim());
                         vac.setCompanyName(element.getElementsByAttributeValue("data-qa", "vacancy-serp__vacancy-employer").text().trim());
                         vac.setSiteName(URL_FORMAT);
@@ -48,6 +51,7 @@ public class HHStrategy implements Strategy {
                     }
                 }
                 ++PAGE_VALUE;
+                if (PAGE_VALUE==99) break;
                 document = getDocument(searchString, PAGE_VALUE);
             }
         } catch (IOException e) {

@@ -1,17 +1,24 @@
 package com.javarush.task.task28.task2810;
 
-import com.javarush.task.task28.task2810.model.Provider;
-import com.javarush.task.task28.task2810.model.Strategy;
+import com.javarush.task.task28.task2810.model.*;
+import com.javarush.task.task28.task2810.view.HtmlView;
+
 
 import java.io.IOException;
-import java.util.ArrayList;
+
 
 public class Aggregator {
     public static void main(String[] args) throws IOException {
-        //В методе main создай провайдер, а потом создай контроллер с этим провайдером.
-        Provider[] providers = {new Provider(null)};
-        Controller controller = new Controller(providers);
-        //В методе main вместо вывода на экран напиши controller.scan();
-        controller.scan();
+//Provider[] providers = {new Provider(new HHStrategy() {}),new Provider(new MoikrugStrategy() {})};
+        HtmlView htmlView = new HtmlView();
+        Provider hhProvider = new Provider(new HHStrategy());
+        MoikrugStrategy moikrugStrategy = new MoikrugStrategy();
+        Provider mkProvider = new Provider(moikrugStrategy);
+        Provider[] providers = {hhProvider, mkProvider};
+        //Model model = new Model(htmlView, hhProvider);
+        Model model = new Model(htmlView, providers);
+        Controller controller = new Controller(model);
+        htmlView.setController(controller);
+        htmlView.userCitySelectEmulationMethod();
     }
 }
